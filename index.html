@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Scientific Calculator</title>
+    <style>
+        body { background: #111111; color: #fff; font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; }
+        .calc { background: #1c1c1e; padding: 20px; border-radius: 24px; width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .screen { width: 100%; height: 80px; background: #111111; border: none; border-radius: 12px; margin-bottom: 20px; font-size: 2.2rem; color: #fff; text-align: right; padding: 10px; box-sizing: border-box; outline: none; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        button { padding: 16px 0; font-size: 1.15rem; border: none; border-radius: 50%; background: #2c2c2e; color: #fff; font-weight: 500; cursor: pointer; aspect-ratio: 1; transition: background 0.1s; }
+        button:active { background: #444; }
+        button.op { color: #ff6b00; font-weight: bold; background: #3a3a3c; }
+        button.sci { color: #8e8e93; background: #2c2c2e; }
+        button.orange-txt { color: #ff6b00; }
+        button.eq { background: #ff6b00; color: white; }
+        button.eq:active { background: #e05e00; }
+    </style>
+    <script>
+        function clickVibe() { if (navigator.vibrate) { navigator.vibrate(12); } }
+        function add(v) { clickVibe(); document.getElementById('disp').value += v; }
+        function addSci(f) { clickVibe(); document.getElementById('disp').value += 'Math.' + f + '('; }
+        function cls() { clickVibe(); document.getElementById('disp').value = ''; }
+        function back() { clickVibe(); var d = document.getElementById('disp'); d.value = d.value.slice(0, -1); }
+        
+        // फ़ैक्टोरियल (!) निकालने का फ़ंक्शन
+        function fact(num) {
+            if (num < 0) return "Error";
+            if (num === 0 || num === 1) return 1;
+            for (var i = num - 1; i >= 1; i--) { num *= i; }
+            return num;
+        }
+
+        function run() {
+            clickVibe();
+            var d = document.getElementById('disp');
+            try {
+                if(!d.value) return;
+                let expr = d.value;
+                // फ़ैक्टोरियल (!) चिन्ह को कोड में बदलना
+                if(expr.includes('!')) {
+                    let num = parseFloat(expr.replace('!', ''));
+                    d.value = fact(num);
+                    return;
+                }
+                d.value = eval(expr);
+            } catch(err) { d.value = 'Error'; }
+        }
+    </script>
+</head>
+<body>
+
+<div class="calc">
+    <input type="text" id="disp" readonly placeholder="0" class="screen">
+    <div class="grid">
+        <!-- लाइन 1 -->
+        <button class="sci" onclick="addSci('sin')">sin</button>
+        <button class="sci" onclick="addSci('cos')">cos</button>
+        <button class="sci" onclick="addSci('tan')">tan</button>
+        <button class="sci">rad</button>
+        <button class="sci orange-txt">deg</button>
+        
+        <!-- लाइन 2 -->
+        <button class="sci" onclick="add('Math.log10(')">log</button>
+        <button class="sci" onclick="addSci('log')">ln</button>
+        <button class="sci" onclick="add('(')">(</button>
+        <button class="sci" onclick="add(')')">)</button>
+        <button class="sci">inv</button>
+        
+        <!-- लाइन 3 -->
+        <button class="sci" onclick="add('!')">!</button>
+        <button class="op" onclick="cls()">AC</button>
+        <button class="op" onclick="add('%')">%</button>
+        <button class="op" onclick="back()">⌫</button>
+        <button class="op" onclick="add('/')">÷</button>
+        
+        <!-- लाइन 4 -->
+        <button class="sci" onclick="add('**')">^</button>
+        <button onclick="add('7')">7</button>
+        <button onclick="add('8')">8</button>
+        <button onclick="add('9')">9</button>
+        <button class="op" onclick="add('*')">×</button>
+        
+        <!-- LINE 5 -->
+        <button class="sci" onclick="addSci('sqrt')">√</button>
+        <button onclick="add('4')">4</button>
+        <button onclick="add('5')">5</button>
+        <button onclick="add('6')">6</button>
+        <button class="op" onclick="add('-')">−</button>
+        
+        <!-- LINE 6 -->
+        <button class="sci" onclick="add('Math.PI')">π</button>
+        <button onclick="add('1')">1</button>
+        <button onclick="add('2')">2</button>
+        <button onclick="add('3')">3</button>
+        <button class="op" onclick="add('+')">+</button>
+        
+        <!-- LINE 7 -->
+        <button class="sci" onclick="add('Math.E')">e</button>
+        <button onclick="add('00')">00</button>
+        <button onclick="add('0')">0</button>
+        <button onclick="add('.')">.</button>
+        <button class="eq" onclick="run()">=</button>
+    </div>
+</div>
+
+</body>
+</html>
